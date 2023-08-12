@@ -34,8 +34,8 @@
                   <label class="h5">Jenis Kelamin</label>
                   <select name="lp" class="selectpicker form-control" data-style="py-0" value="{{$student->lp}}">
                     <option value="" selected disabled>Pilih salah satu</option>
-                    <option value="L" @if($student->lp == "L") selected @endif>Laki-laki</option>
-                    <option value="P" @if($student->lp == "P") selected @endif>Perempuan</option>
+                    <option value="laki-laki" {{ $student->lp == 'laki-laki' ? 'selected' : '' }}>Laki-laki</option>
+                    <option value="perempuan" {{ $student->lp == 'perempuan' ? 'selected' : '' }}>Perempuan</option>
                   </select>
                 </div>
               </div>

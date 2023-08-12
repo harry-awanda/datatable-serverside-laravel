@@ -14,13 +14,13 @@ class CreateStudentsTable extends Migration
     public function up()
     {
         Schema::create('students', function (Blueprint $table) {
-            $table->increments('id');
+            $table->id();
             $table->string('nisn',50);
             $table->string('name',50);
-            $table->string('lp',2);
+            $table->enum('lp',['laki-laki', 'perempuan'])->default('laki-laki');
             $table->string('birthplace',40);
-            $table->date('birtdate');
-            $table->text('address',150)->nullable();
+            $table->string('birthdate');
+            $table->longText('address')->nullable();
             $table->string('religion',15)->nullable();
             $table->string('contact',15)->nullable();
             $table->string('prev_sch',150)->nullable();

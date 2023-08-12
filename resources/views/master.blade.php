@@ -17,6 +17,7 @@
     <link rel="stylesheet" href="{{ asset('assets/vendor/tui-calendar/tui-date-picker/dist/tui-date-picker.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/vendor/tui-calendar/tui-time-picker/dist/tui-time-picker.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/toastr.css') }}">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
   </head>
   <body class="  ">
     <!-- Wrapper Start -->
@@ -61,6 +62,8 @@
   <script src="{{ asset('assets/vendor/moment.min.js') }}"></script>
   <script src="{{ asset('assets/js/sweetalert.js') }}"></script>
   <script src="{{ asset('assets/js/toastr.min.js') }}"></script>
-  
+  <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+  <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+  @stack('scripts')
   </body>
 </html>

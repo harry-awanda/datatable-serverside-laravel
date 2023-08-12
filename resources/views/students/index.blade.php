@@ -27,36 +27,8 @@
       <div class="card-body">
         <!-- <p>Images in Bootstrap are made responsive with <code>.img-fluid</code>. <code>max-width: 100%;</code> and <code>height: auto;</code> are applied to the image so that it scales with the parent element.</p> -->
         <div class="table-responsive">
-          <table id="datatable" class="table table-striped">
-            <thead>
-            <tr class="ligth text-center">
-              <th>#</th>
-              <th>NISN</th>
-              <th>Nama Siswa</th>
-              <th>Jenis Kelamin</th>
-              <th>Pilihan</th>
-            </tr>
-            </thead>
-            <tbody>
-              @foreach($students as $student)
-              <tr>
-                <td>{{ $loop->index+1 }}</td>
-                <td>{{$student -> nisn}}</td>
-                <td>{{$student -> name}}</td>
-                <td>{{$student -> lp}}</td>
-                <td align="center">
-                  <div class="btn-group btn-group-toggle btn-group-sm btn-group-flat">
-                    <a class="button btn button-icon bg-warning" href="{{ route('students.edit', $student->id) }}">Update</a>
-                    <a class="button btn button-icon bg-danger" href="{{ route('students.destroy', $student->id) }}" onclick="event.preventDefault(); document.getElementById('delete-form-{{ $student->id }}').submit();">Delete</a>
-                  </div>
-                  <form id="delete-form-{{ $student->id }}" action="{{ route('students.destroy', $student->id) }}" method="POST" style="display: none;">
-                    @csrf
-                    @method('delete')
-                  </form>
-                </td>
-              </tr>                         
-              @endforeach
-            </tbody>
+          <table id="datatables" class="table table-striped">
+            {{--  --}}
           </table>
         </div>
       </div>
@@ -65,6 +37,43 @@
   </div>
 </div>
 @endsection
+@push('scripts')
+    <script>
+        $(document).ready(function() {
+              $('#datatables').DataTable({
+                  ajax: '{{ route('json') }}', // Pastikan URL sesuai dengan route yang sesuai
+                  processing: true,
+                  serverSide: true,
+                  deferRender: true,
+                  columns: [
+                    // {title: 'nomor'},
+                    { title: 'NISN', data: 'nisn' },
+                    { title: 'Nama Siswa', data: 'name' },
+                    { title: 'Jenis Kelamin', data: 'lp' },
+                    {
+                      title: 'Action',
+                      data: null,
+                          render: function (data, type, row) {
+                              var editUrl = '{{ route('students.edit', '__id__') }}';
+                              var deleteUrl = '{{ route('students.destroy', '__id__') }}';
+
+                              editUrl = editUrl.replace('__id__', data.id);
+                              deleteUrl = deleteUrl.replace('__id__', data.id);
+
+                              return '<a href="' + editUrl + '" class="btn btn-warning">Edit</a>' +
+                                    '<form action="' + deleteUrl + '" method="POST" style="display: inline-block;">' +
+                                    '@method('DELETE') @csrf' +
+                                    '<button type="submit" class="btn btn-danger">Hapus</button>' +
+                                    '</form>';
+                          },
+                      searchable: false,
+                    },                                           
+                  ],
+              });
+          });
+    </script>
+@endpush
+
 
 @section('footer')
 

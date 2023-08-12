@@ -33,8 +33,8 @@
                   <label class="h5">Jenis Kelamin</label>
                   <select name="lp" class="selectpicker form-control" data-style="py-0">
                     <option value="" selected disabled>Pilih salah satu</option>
-                    <option value="L">Laki-laki</option>
-                    <option value="P">Perempuan</option>
+                    <option value="laki-laki">Laki-laki</option>
+                    <option value="perempuan">Perempuan</option>
                   </select>
                 </div>
               </div>
