@@ -18,9 +18,17 @@ class dashboardController extends Controller
     }
 
     public function deleteALL(Request $request){
-        // dd($request->all());
         $ids = $request->input('ids');
         Student::whereIn('id', $ids)->delete();
+
+        return response()->json(['message' => 'Data deleted successfully']);
+    }
+
+    public function updateALL(Request $request){
+        $ids = $request->input('ids');
+        $selectedGender = $request->input('lp');
+
+        Student::whereIn('id', $ids)->update(['lp' => $selectedGender]);
 
         return response()->json(['message' => 'Data deleted successfully']);
     }

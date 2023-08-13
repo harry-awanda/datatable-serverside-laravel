@@ -89,15 +89,6 @@ class studentController extends Controller
   public function destroy(Student $student)
   {
     $student->delete();
-    // return response()->json(['message' => 'Data deleted successfully']);
     return redirect()->route('students.index');
   }
-  // public function deleteAll(Request $request)
-  // {
-  //   $ids = $request->ids;
-  //   Student::whereIn('id',$ids)->delete();
-  //   // return response()->json(["success" => "Data Siswa berhasil dihapus"]);
-  //   return response()->json(['success'=>'Data Siswa berhasil dihapus !','URL' => "{{ route('students.index') }}"]);
-  // }
- 
 }
