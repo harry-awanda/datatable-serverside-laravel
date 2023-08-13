@@ -40,13 +40,26 @@
 @push('scripts')
     <script>
         $(document).ready(function() {
-              $('#datatables').DataTable({
+              var table = $('#datatables').DataTable({
                   ajax: '{{ route('json') }}', // Pastikan URL sesuai dengan route yang sesuai
                   processing: true,
                   serverSide: true,
                   deferRender: true,
                   columns: [
-                    // {title: 'nomor'},
+                    // {title: 'nomor'},                  
+                    {
+                        title: 'checkBox',
+                        data: null,
+                        render: function(data, type, row) {
+                            var checkboxId = data.id;
+
+                            return '<div class="">' +
+                                '<input type="checkbox" class="custom-checkbox" data-id="' + checkboxId + '">' +
+                                '<label class="" for="' + checkboxId + '"></label>' +
+                                '</div>';
+                        },
+                        searchable: false, // Nonaktifkan pencarian hanya untuk kolom ini
+                    },
                     { title: 'NISN', data: 'nisn' },
                     { title: 'Nama Siswa', data: 'name' },
                     { title: 'Jenis Kelamin', data: 'lp' },
@@ -60,15 +73,56 @@
                               editUrl = editUrl.replace('__id__', data.id);
                               deleteUrl = deleteUrl.replace('__id__', data.id);
 
-                              return '<a href="' + editUrl + '" class="btn btn-warning">Edit</a>' +
-                                    '<form action="' + deleteUrl + '" method="POST" style="display: inline-block;">' +
-                                    '@method('DELETE') @csrf' +
-                                    '<button type="submit" class="btn btn-danger">Hapus</button>' +
-                                    '</form>';
+                              return  '<div class="btn-group btn-group-toggle btn-group-sm btn-group-flat">' + 
+                                      '<a href="' + editUrl + '" class="btn btn-warning">Edit</a>' +
+                                      '<a class="button btn button-icon bg-danger" href="' + deleteUrl + '" onclick="event.preventDefault(); document.getElementById(\'delete-form-' + data.id + '\').submit();">Delete</a>' +
+                                      '</div>' +
+                                      '<form id="delete-form-' + data.id + '" action="' + deleteUrl + '" method="POST" style="display: none;">' +                                   
+                                      '@method('DELETE') @csrf' +                                    
+                                      '</form>';
                           },
                       searchable: false,
                     },                                           
                   ],
+                  order: [[1, 'asc']],
+              });
+              $('#deleteAllSelectedRecord').on('click', function (){
+                // alert('Script executed');
+                var selectedId = [];
+                $('.custom-checkbox:checked').each(function(){
+                  selectedId.push($(this).data('id'));
+                });
+                // console.log(selectedId);
+                if (selectedId.length === 0) {
+                    Swal.fire('Data tidak terpilih', 'Pilih data yang ingin dihapus', 'info');
+                    return; // Stop further execution
+                }
+                Swal.fire({
+                  title: 'Apa kamu yakin ingin hapus data?',
+                  text: "Data yang sudah dihapus tidak bisa dikembalikan",
+                  icon: 'warning',
+                  showCancelButton: true,
+                  confirmButtonColor: '#3085d6',
+                  cancelButtonColor: '#d33',
+                  confirmButtonText: 'Iya, hapus!'
+                }).then((result) => {
+                  if (result.isConfirmed) {
+                      axios.delete('{{ route('students.deleteALL') }}', {
+                          data: {
+                              ids: selectedId
+                          }
+                      })
+                      .then(response => {
+                          Swal.fire('Deleted!', 'Data nya sudah dihapus', 'success').then(() => {
+                              table.ajax.reload();
+                          });
+                      })
+                      .catch(error => {
+                          Swal.fire('Data gagal dihapus', '', 'error');
+                          console.error(error);
+                      });
+                  }
+                });
               });
           });
     </script>

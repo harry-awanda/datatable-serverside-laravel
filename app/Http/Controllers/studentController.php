@@ -89,6 +89,7 @@ class studentController extends Controller
   public function destroy(Student $student)
   {
     $student->delete();
+    // return response()->json(['message' => 'Data deleted successfully']);
     return redirect()->route('students.index');
   }
   // public function deleteAll(Request $request)

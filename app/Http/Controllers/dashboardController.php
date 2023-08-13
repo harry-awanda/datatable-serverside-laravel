@@ -16,4 +16,12 @@ class dashboardController extends Controller
     {
         return DataTables::of(Student::query())->make(true);
     }
+
+    public function deleteALL(Request $request){
+        // dd($request->all());
+        $ids = $request->input('ids');
+        Student::whereIn('id', $ids)->delete();
+
+        return response()->json(['message' => 'Data deleted successfully']);
+    }
 }

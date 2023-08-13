@@ -16,3 +16,4 @@ use Illuminate\Support\Facades\Route;
 Route::get('dashboard', 'App\Http\Controllers\dashboardController@index')->name('dashboard');
 Route::resource('students', 'App\Http\Controllers\studentController');
 Route::get('json', 'App\Http\Controllers\dashboardController@json')->name('json');
+Route::delete('deleteALL', 'App\Http\Controllers\dashboardController@deleteALL')->name('students.deleteALL');
