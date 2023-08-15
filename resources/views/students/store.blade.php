@@ -11,9 +11,7 @@
           </div>
         </div>
         <div class="card-body">
-          <!-- <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi vulputate, ex ac venenatis mollis, diam
-          nibh finibus leo</p> -->
-          <form action="{{ route('students.store') }}" method="POST">
+          <form id="studentsForm" enctype="multipart/form-data">
             {{csrf_field()}}
             <div class="row">
               <div class="col-lg-6">
@@ -81,8 +79,7 @@
                 </div>
               </div>
               <div class="col-lg-12">
-                <button type="submit" class="btn btn-primary">Simpan</button>
-                
+                <button type="submit" class="btn btn-primary">Simpan</button>             
               </div>
             </div>     
           </form>
@@ -93,3 +90,52 @@
 </div>
 
 @endsection
+@push('scripts')
+<script>
+  $(document).ready(function () {
+    document.getElementById('studentsForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+      Swal.fire({
+        title: 'Apa kamu yakin ingin menyimpan data?',
+        showDenyButton: true,
+        showCancelButton: true,
+        confirmButtonText: 'Simpan',
+        denyButtonText: `jangan disimpan`,
+      }).then((result) => {
+        if (result.isConfirmed) {
+          const formData = new FormData(this);
+          console.log(formData);
+          axios.post('{{ route('students.store') }}', formData)
+          .then(response => {
+            Swal.fire('Data tersimpan!', '', 'success').then(() => {
+              window.location.reload();
+            });
+          })
+          .catch(error => {
+            if(error.response && error.response.status === 422){
+              const errorMessages = error.response.data.errors;
+              let errorMessage = '';
+              
+              let isFirstError = true; // Flag to track the first error
+              for (const field in errorMessages) {
+                  if (!isFirstError) {
+                      errorMessage += ', '; // Add a comma before the error message
+                  } else {
+                      isFirstError = false;
+                  }
+                  errorMessage += errorMessages[field][0];
+              }
+              Swal.fire('Data gagal disimpan', errorMessage, 'error');
+            }else{
+              Swal.fire('Data gagal disimpan', 'Terjadi kesalahan pada sisi server, hubungi kami segera', 'error');
+            }
+            console.error(error);
+          })
+        } else if (result.isDenied) {
+          Swal.fire('Data tidak jadi disimpan', '', 'info');
+        }
+      });
+    });
+  });
+</script>
+@endpush

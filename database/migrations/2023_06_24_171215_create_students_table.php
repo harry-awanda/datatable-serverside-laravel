@@ -21,7 +21,7 @@ class CreateStudentsTable extends Migration
             $table->string('birthplace',40);
             $table->string('birthdate');
             $table->longText('address')->nullable();
-            $table->string('religion',15)->nullable();
+            $table->string('religion');
             $table->string('contact',15)->nullable();
             $table->string('prev_sch',150)->nullable();
             $table->string('photo')->nullable();

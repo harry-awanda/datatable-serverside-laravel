@@ -41,8 +41,30 @@ class studentController extends Controller
    */
   public function store(Request $request)
   {
+    $request->validate([
+      'nisn' => 'required|max:50',
+      'name' => 'required|string|max:50',
+      'lp' => 'required|in:laki-laki,perempuan',
+      'birthplace' => 'required',
+      'birthdate' => 'required',
+      'religion' => 'required',
+      'contact' => 'required',
+    ], [
+      'nisn.required' => 'NISN harus diisi',
+      'nisn.max' => 'NISN tidak boleh lebih dari 50 karakter',
+      'name.required' => 'Nama harus diisi',
+      'name.max' => 'Nama tidak boleh lebih dari 50 karakter',
+      'lp.required' => 'Jenis kelamin harus diisi',
+      'lp.in' => 'Data harus berupa laki-laki atau perempuan',
+      'birthplace.required' => 'Data tempat lahir harus diisi',
+      'birthdate.required' => 'Data tanggal lahir harus diisi',
+      'religion.required' => 'Data agama harus diisi',
+      'contact.required' => 'Data nomor telephone harus diisi',
+    ]);
+
     Student::create($request->all());
-    return redirect()->route('students.index');
+    return response()->json();
+    // return redirect()->route('students.index');
   }
 
   /**
