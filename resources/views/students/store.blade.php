@@ -108,7 +108,7 @@
           axios.post('{{ route('students.store') }}', formData)
           .then(response => {
             Swal.fire('Data tersimpan!', '', 'success').then(() => {
-              window.location.reload();
+              window.location.href = '{{ route('students.index') }}';
             });
           })
           .catch(error => {

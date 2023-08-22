@@ -20,6 +20,7 @@ class studentController extends Controller
   {
     $students = Student::all();
     return view ('students.index',compact('students'));
+    // return response()->json($students);
   }
 
 
